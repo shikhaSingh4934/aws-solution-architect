@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -e #exits
+
+echo "==sync"
+if [ -z "$1" ]; then
+  echo "❌ No argument provided. Please pass the bucket name as the first argument."
+  exit 1
+fi
+BUCKET_NAME=$1
+
+# Where to store the files
+OUTPUT_DIR="temp/s3_bashscripts"
+rm -r $OUTPUT_DIR
+# Create the output folder if it doesn't exist
+mkdir -p $OUTPUT_DIR
+
+# Generate a random number between 5 and 10
+NUM_FILES=$((RANDOM % 6 + 5))
+
+
+for ((i = 1; i <= NUM_FILES; i++)); do
+  FILENAME="file_$i.txt"
+  FILEPATH="$OUTPUT_DIR/$FILENAME"
+
+  # Create the file with random content
+  echo "Random content for $FILENAME" > "$FILEPATH"
+#   echo "✅ Created: $FILEPATH"
+done
+
+tree $OUTPUT_DIR
+
+aws s3 sync $OUTPUT_DIR s3://$BUCKET_NAME/files

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+echo = "== put-object"
+
+if [ -z "$1" ]; then
+  echo "❌ No argument provided. Please pass the bucket name as the first argument."
+  exit 1
+fi
+
+
+
+if [ -z "$2" ]; then
+  echo "❌ No argument provided. Please pass the file name as the second argument."
+  exit 1
+fi
+BUCKET_NAME=$1
+FILE_NAME=$2
+
+OBJECT_KEY=$(basename "$FILE_NAME")
+
+aws s3api put-object \
+--bucket $BUCKET_NAME \
+--body $FILE_NAME \
+--key $OBJECT_KEY \
+ 
