@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+echo "==create bucket"
+if [ -z "$1" ]; then
+  echo "❌ No argument provided. Please pass the bucket name as the first argument."
+  exit 1
+fi
+BUCKET_NAME=$1
+
+aws s3api create-bucket \
+--bucket $BUCKET_NAME \
+--create-bucket-configuration="LocationConstraint=us-east-2" \
+--query Location \
+--output text
