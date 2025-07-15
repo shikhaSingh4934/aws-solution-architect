@@ -1,9 +1,9 @@
 ---terraform
 commands to run 
 need to connect to provider which is in main tf feom terrafrom website copy pasted
-terraform init ---to intialize it, download some files like.lock.hcl
+terraform init ---inside you folder to intialize it, download some files like.lock.hcl
 terraform plan---(give change state like cloudformation)
-terraform apply ---creates the bucket
+terraform apply ---creates the bucket /// or terraform apply --auto-approve (for not hitting yes for change sets)
 terraform destroy---destroy it 
 
 --cloudformation
