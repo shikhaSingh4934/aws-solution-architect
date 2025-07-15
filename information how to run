@@ -8,3 +8,12 @@ terraform destroy---destroy it
 
 --cloudformation
 ./deploy---will run deploy file
+
+
+---cdk
+first cdk folder
+globally install not in folder using---"npm i -g aws-cdk"---creates files in cdk folder
+now in lib folder we have our "cdk-stacks.ts" file (main file where we create and amnage everything)
+cdk bootstrap--cmd
+cdk deploy --cmd
+cdk destroy --cmd
