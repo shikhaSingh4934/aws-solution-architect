@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+FILE=mytest.txt
+python3 -c "import zlib; print(zlib.crc32(open('$FILE','rb').read()))"
+
+# 2602144596 # convertthis to hex strip0x --9b199354
+
+
+# aws s3api put-object \
+#   --bucket checksums-examples-sh758\
+#   --key mytest.txt \
+#   --body mytest.txt \
+#   --checksum-algorithm CRC32
+
+# aws s3api head-object \
+#   --bucket checksums-examples-sh758 \
+#   --key mytest.txt
+
+# mxmTVA== #covert this from Base64 to hex"echo "mxmTVA==" | base64 --decode | xxd -p" ---9b199354
