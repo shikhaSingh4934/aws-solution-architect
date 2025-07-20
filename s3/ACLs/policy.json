@@ -1,0 +1,18 @@
+{
+  "Grants": [
+    {
+      "Grantee": {
+        "DisplayName": "string",
+        "EmailAddress": "string",
+        "ID": "string",
+        "Type": "CanonicalUser", #here add grantee canonicaluserID
+        "URI": "string"
+      },
+      "Permission": "FULL_CONTROL"
+    }
+  ],
+  "Owner": {
+    "DisplayName": "string",
+    "ID": "string" #here add owner canonicaluserID
+  }
+}
