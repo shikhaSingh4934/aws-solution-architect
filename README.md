@@ -1,1 +1,1 @@
-# aws-solution-example
+# aws-solution-architect practice
