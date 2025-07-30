@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Creating role for assumeRole exmaple and resource to access
+# Resources section
+Resources:
+  S3Bucket: 
+    Type: 'AWS::S3::Bucket'
+    Properties: 
+      BucketName: "sts-exmaple-bucket-sh4566"
+  StsRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+      #trust realtionship
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "arn:aws:iam::969234563215:user/sts-test-user"  #we want to give this user assume role permission
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: S3access
+          PolicyDocument:
+          #s3 access permisiion
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 'S3:*'
+                Resource: 
+                  - "arn:aws:s3:::*"
+                  - "arn:aws:s3:::sts-exmaple-bucket-sh4566"
+                  - "arn:aws:s3:::sts-exmaple-bucket-sh4566/*"
+                
+    
+
+
+    
+
+
