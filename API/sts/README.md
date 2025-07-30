@@ -74,11 +74,11 @@ aws sts assume-role \
 My assumed role profile is "assumed"
 ```sh
 aws sts get-caller-identity --profile assumed
-``
+```
 ```sh
 #So for this profile you will have permission to list
 aws s3 ls --profile assumed
-``
+```
 ```sh
 #which you didn;t had for this profile which we made with no permisioon 
 aws s3 ls --profile sts
