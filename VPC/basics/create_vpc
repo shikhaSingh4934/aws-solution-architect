@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -e
 #Create a VPC
-VPC_ID= $(aws ec2 create-vpc \
+VPC_ID=$(aws ec2 create-vpc \
 --cidr-block "172.1.0.0/16" \
 --tag-specifications 'ResourceType=vpc, Tags=[{Key=Name, Value=my-vc-1}]' \
 --region "us-east-2" \
---query Vpc.VpcID \
+--query Vpc.VpcId \
 --output text)
 
 # Turn on DNS Hostnames
@@ -17,13 +17,13 @@ SUBNET_ID=$(aws ec2 create-subnet \
 --cidr-block 172.1.0.0/20 \
 --query Subnet.SubnetId \
 --output text)
-
 echo $SUBNET_ID
 
 #create internet gateway
 IGW_ID=$(aws ec2 create-internet-gateway \
 --query InternetGateway.InternetGatewayId \
--- output text)
+--output text)
+
 echo $IGW_ID
 # attach igw
 aws ec2 attach-internet-gateway --internet-gateway-id $IGW_ID --vpc-id $VPC_ID
@@ -42,4 +42,12 @@ echo $RT_ID
 aws ec2 associate-route-table \
 --route-table-id $RT_ID \
 --subnet-id $SUBNET_ID
+
 # add a rout for our RT to our IGW
+aws ec2 create-route \
+--route-table-id $RT_ID \
+--destination-cidr-block 0.0.0.0/0 \
+--gateway-id $IGW_ID
+
+# Print out delete command
+echo "./delete_vpc $VPC_ID $IGW_ID $SUBNET_ID $ASSOC_ID $RT_ID"
