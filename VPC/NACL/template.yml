@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: EC2 instance with SSM Session Manager enabled
+Parameters:
+  SubnetId:
+    Type: String
+    Default: subnet-0e6ff34a0c78eb951
+  VpcId:
+    Type: String
+    Default: vpc-0ad3b587d18a81865
+
+Resources:
+  MySG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref VpcId
+      GroupDescription: Allow outbound only
+      SecurityGroupIngress:
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+
+  MySSMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  MyInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref MySSMRole
+
+  MyInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-04e5216265f05dc60  # Amazon Linux 2 in us-east-1
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          SubnetId: !Ref SubnetId
+          AssociatePublicIpAddress: true
+          GroupSet:
+            - !Ref MySG
+          DeleteOnTermination: true
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          yum update -y
+          yum install -y httpd amazon-ssm-agent
+          systemctl start httpd
+          systemctl enable httpd
+          systemctl enable amazon-ssm-agent
+          systemctl start amazon-ssm-agent
+          echo "<html><body><h1>Hello from Apache on Amazon Linux 2!</h1></body></html>" > /var/www/html/index.html
+      IamInstanceProfile: !Ref MyInstanceProfile
+      Tags:
+        - Key: Name
+          Value: EC2-SSM-Enabled
